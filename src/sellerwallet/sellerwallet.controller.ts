@@ -12,23 +12,11 @@ export class SellerwalletController {
     return this.sellerwalletService.create(createSellerwalletDto);
   }
 
-  @Get()
-  findAll() {
-    return this.sellerwalletService.findAll();
-  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.sellerwalletService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSellerwalletDto: UpdateSellerwalletDto) {
-    return this.sellerwalletService.update(+id, updateSellerwalletDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.sellerwalletService.remove(+id);
-  }
+ 
 }

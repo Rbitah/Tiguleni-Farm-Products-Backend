@@ -1,16 +1,26 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { PaymentsService } from './payments.service';
-import { CreatePaymentDto } from './dto/create-payment.dto';
-import { UpdatePaymentDto } from './dto/update-payment.dto';
 
 @Controller('payments')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
   @Post()
-  create(@Body() createPaymentDto: CreatePaymentDto) {
-    return this.paymentsService.create(createPaymentDto);
+  create(@Body() body: { productId: string; userId: string }) {
+    const { productId, userId } = body;
+    return this.paymentsService.create(productId, userId);
   }
 
-  
+  @Get('verify/:tx_ref')
+  async verifyPayment(@Param('tx_ref') tx_ref: string) {
+    return this.paymentsService.verifyPayment(tx_ref);
+  }
 }

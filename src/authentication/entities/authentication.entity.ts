@@ -14,7 +14,7 @@ import { Sellerwallet } from 'src/sellerwallet/entities/sellerwallet.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  user_Id: string;
+  userId: string;
 
   @Column({ unique: true })
   email: string;

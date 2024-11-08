@@ -3,8 +3,8 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Payment {
-  @PrimaryGeneratedColumn()
-  payment_Id: number;
+  @PrimaryGeneratedColumn('uuid')
+  payment_Id: string;
 
   @Column()
   customer: string;

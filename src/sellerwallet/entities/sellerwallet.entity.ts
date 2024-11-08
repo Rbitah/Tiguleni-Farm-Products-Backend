@@ -9,8 +9,8 @@ import {
 
 @Entity()
 export class Sellerwallet {
-  @PrimaryGeneratedColumn()
-  sellerwallet_Id: number;
+  @PrimaryGeneratedColumn('uuid')
+  sellerwallet_Id: string;
 
   @Column()
   totalNumberOfSales: number;

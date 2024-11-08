@@ -14,11 +14,13 @@ import { User } from 'src/authentication/entities/authentication.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { firstValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PaymentsService {
   constructor(
     private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
 
     @InjectRepository(Payment)
     private readonly paymentRepository: Repository<Payment>,
@@ -52,7 +54,7 @@ export class PaymentsService {
       headers: {
         accept: 'application/json',
         'content-type': 'application/json',
-        Authorization: 'Bearer sec-test-p4skvgLUHNJfxJJn17TGOIBaQOaeEyvS',
+        Authorization: `Bearer ${this.configService.get('PAYCHANGU_API_KEY')}`,
       },
     };
 
@@ -76,8 +78,8 @@ export class PaymentsService {
           'https://api.paychangu.com/payment',
           {
             tx_ref,
-            callback_url: `https://6335-41-70-47-191.ngrok-free.app/callback`,
-            return_url: 'https://6335-41-70-47-191.ngrok-free.app',
+            callback_url: this.configService.get('CALLBACK_URL'),
+            return_url:this.configService.get('RETURN_URL'),
             currency: 'MWK',
             email: buyer.email,
             name: product.products_name,
@@ -122,7 +124,7 @@ export class PaymentsService {
           {
             headers: {
               Accept: 'application/json',
-              Authorization: 'Bearer sec-test-p4skvgLUHNJfxJJn17TGOIBaQOaeEyvS',
+              Authorization: `Bearer ${this.configService.get('PAYCHANGU_API_KEY')}`,
             },
           },
         ),

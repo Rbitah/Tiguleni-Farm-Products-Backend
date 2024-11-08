@@ -24,8 +24,8 @@ export class WithdrawalsService {
   ) {}
 
   private readonly operatorRefIds = {
-    '8': '27494cb5-ba9e-437f-a114-4e7a7686bcca', // TNM Mpamba
-    '9': '20be6c20-adeb-4b5b-a7ba-0769820df4fb', // Airtel Money
+    '8': this.configService.get('TNM_Mpamba'), 
+    '9': this.configService.get('Airtel_Money'), 
   };
 
   private generateUniqueTransactionReference(): string {

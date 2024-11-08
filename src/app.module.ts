@@ -7,6 +7,9 @@ import { typeOrmConfig } from 'typeOrmConfig';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
+import { PaymentsModule } from './payments/payments.module';
+import { WithdrawalsModule } from './withdrawals/withdrawals.module';
+import { AuthenticationModule } from './authentication/authentication.module';
 
 @Module({
   imports: [
@@ -22,6 +25,12 @@ import { ProductsModule } from './products/products.module';
     }),
 
     ProductsModule,
+
+    PaymentsModule,
+
+    WithdrawalsModule,
+
+    AuthenticationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

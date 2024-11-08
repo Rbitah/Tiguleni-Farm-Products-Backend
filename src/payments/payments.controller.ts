@@ -19,7 +19,7 @@ export class PaymentsController {
     return this.paymentsService.create(productId, userId);
   }
 
-  @Get('verify/:tx_ref')
+  @Get('verifying/:tx_ref')
   async verifyPayment(@Param('tx_ref') tx_ref: string) {
     return this.paymentsService.verifyPayment(tx_ref);
   }

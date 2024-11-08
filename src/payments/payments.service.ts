@@ -31,7 +31,7 @@ export class PaymentsService {
 
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) { }
+  ) {}
 
   private generateUniqueTransactionReference(): string {
     return uuidv4();
@@ -60,9 +60,9 @@ export class PaymentsService {
     const pendingPayment = this.paymentRepository.create({
       status: 'pending',
       tx_ref,
-      customer:buyer.userId,
+      customer: buyer.userId,
       buyer,
-      seller:product.seller.userId,
+      seller: product.seller.userId,
       productId,
       customer_email: buyer.email,
       amount: product.price,
@@ -108,7 +108,7 @@ export class PaymentsService {
       );
       throw new HttpException(
         error.response?.data?.message ||
-        'An error occurred while processing payment.',
+          'An error occurred while processing payment.',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
@@ -193,7 +193,7 @@ export class PaymentsService {
       );
       throw new HttpException(
         error.response?.data?.message ||
-        'An error occurred while verifying payment.',
+          'An error occurred while verifying payment.',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

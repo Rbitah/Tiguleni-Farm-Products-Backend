@@ -9,7 +9,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([User,Products,Payment,Sellerwallet]),HttpModule],
+  imports: [
+    TypeOrmModule.forFeature([User, Products, Payment, Sellerwallet]),
+    HttpModule,
+  ],
   controllers: [PaymentsController],
   providers: [PaymentsService],
 })

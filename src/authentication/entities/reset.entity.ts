@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Authentication } from "./authentication.entity";
+import {  User } from "./authentication.entity";
 
 @Entity()
 export class Token {
@@ -12,8 +12,8 @@ export class Token {
     @Column()
     expirationDate:Date
     
-    @OneToOne(() => Authentication) 
+    @OneToOne(() => User) 
     @JoinColumn() 
-    user: Authentication;
+    user: User;
 
 }

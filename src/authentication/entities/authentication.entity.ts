@@ -1,20 +1,42 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { Role } from "./role.enum";
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Role } from './role.enum';
+import { Products } from 'src/products/products.entity';
+import { Payment } from 'src/payments/entities/payment.entity';
+import { Withdrawal } from 'src/withdrawals/entities/withdrawal.entity';
+import { Sellerwallet } from 'src/sellerwallet/entities/sellerwallet.entity';
 
 @Entity()
-export class Authentication {
-    @PrimaryGeneratedColumn('uuid')
-    user_Id:string
+export class User {
+  @PrimaryGeneratedColumn('uuid')
+  user_Id: string;
 
-    @Column({unique:true})
-    email:string
+  @Column({ unique: true })
+  email: string;
 
-    @Column()
-    password:string
+  @Column()
+  password: string;
 
-    @Column()
-    username:string
+  @Column()
+  username: string;
 
-    @Column({type:'enum',enum:Role, default:Role.BUYER})
-    role:Role
+  @Column({ type: 'enum', enum: Role, default: Role.BUYER })
+  role: Role;
+
+  @OneToMany(() => Products, (product) => product.seller)
+  products: Products[];
+
+  @OneToMany(() => Payment, (payment) => payment.buyer)
+  payments: Payment[];
+
+  @OneToMany(() => Withdrawal, (withdrawal) => withdrawal.seller)
+  withdrawals: Withdrawal[];
+
+  @OneToOne(() => Sellerwallet, (wallet) => wallet.seller)
+  wallet: Sellerwallet;
 }

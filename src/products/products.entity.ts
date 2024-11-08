@@ -1,3 +1,4 @@
+import { User } from "src/authentication/entities/authentication.entity";
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 
 @Entity()
@@ -19,7 +20,8 @@ export class Products{
     @Column()
     imageurl:string;
     
-    
+    @ManyToOne(() => User, (user) => user.products)
+  seller: User;
 
 
     

@@ -7,10 +7,9 @@ import { UpdateWithdrawalDto } from './dto/update-withdrawal.dto';
 export class WithdrawalsController {
   constructor(private readonly withdrawalsService: WithdrawalsService) {}
 
-  @Post()
-  create(@Body() createWithdrawalDto: CreateWithdrawalDto) {
-    return this.withdrawalsService.create(createWithdrawalDto);
+  @Post('cash-out')
+  cashoutMobile(@Body() createWithdrawalDto: CreateWithdrawalDto) {
+    return this.withdrawalsService.cashoutMobile(createWithdrawalDto);
   }
-
  
 }

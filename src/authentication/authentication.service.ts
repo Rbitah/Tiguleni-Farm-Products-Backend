@@ -72,7 +72,13 @@ export class AuthenticationService {
     return this.generateAccessToken(userAvailable.userId, userAvailable.role);
   }
 
-  
- 
+  async generateAccessToken(userId, role) {
+    const accessToken = this.jwtService.sign({ userId, role });
+
+    return {
+      accessToken,
+    };
+  }
+
   async resetPassword() {}
 }

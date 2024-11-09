@@ -79,7 +79,7 @@ export class PaymentsService {
           {
             tx_ref,
             callback_url: this.configService.get('CALLBACK_URL'),
-            return_url:this.configService.get('RETURN_URL'),
+            return_url: this.configService.get('RETURN_URL'),
             currency: 'MWK',
             email: buyer.email,
             name: product.products_name,
@@ -165,16 +165,15 @@ export class PaymentsService {
         }
 
         sellerWallet.mainWalletBalance += Number(paymentDetails.amount);
-        console.log('statussss', paymentDetails.status);
-        const verifiedPayment = this.paymentRepository.create({
-          status: paymentDetails.status,
-          tx_ref,
-          amount: paymentDetails.amount,
-          customer_email: paymentDetails.customer.email,
-          date: new Date(paymentDetails.authorization.completed_at),
-        });
 
-        await this.paymentRepository.save(verifiedPayment);
+        pendingPayment.status = paymentDetails.status;
+        pendingPayment.amount = paymentDetails.amount;
+        pendingPayment.customer_email = paymentDetails.customer.email;
+        pendingPayment.date = new Date(
+          paymentDetails.authorization.completed_at,
+        );
+
+        await this.paymentRepository.save(pendingPayment);
         await this.sellerwalletRepository.save(sellerWallet);
 
         return {

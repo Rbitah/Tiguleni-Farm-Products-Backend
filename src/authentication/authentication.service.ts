@@ -80,5 +80,47 @@ export class AuthenticationService {
     };
   }
 
+  async forgotPassword(email) {
+    const userWithEmail = await this.userRepository.findOne({
+      where: { email: email },
+    });
+
+    if (userWithEmail) {
+      let resetCode;
+      let existingResetCode;
+
+      do {
+        resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+        existingResetCode = await this.resetRepository.findOne({
+          where: { token: resetCode },
+        });
+      } while (existingResetCode);
+
+      const expirationDate = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes from now
+
+      const existingUserReset = await this.resetRepository.findOne({
+        where: { user: userWithEmail },
+      });
+
+      if (existingUserReset) {
+        existingUserReset.token = resetCode;
+        existingUserReset.expirationDate = expirationDate;
+        await this.resetRepository.save(existingUserReset);
+      } else {
+        await this.resetRepository.save({
+          token: resetCode,
+          user: userWithEmail,
+          expirationDate: expirationDate,
+        });
+      }
+
+      await this.mailService.sendResetPasswordEmail(email, resetCode);
+    }
+
+    return {
+      message: 'If a user with that email exists, a reset email has been sent.',
+    };
+  }
+
   async resetPassword() {}
 }

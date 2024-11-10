@@ -9,7 +9,6 @@ import { PaymentsModule } from './payments/payments.module';
 import { WithdrawalsModule } from './withdrawals/withdrawals.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { SellerwalletModule } from './sellerwallet/sellerwallet.module';
-import { MailService } from './mail/mail.service';
 
 @Module({
   imports: [
@@ -30,6 +29,6 @@ import { MailService } from './mail/mail.service';
     SellerwalletModule,
   ],
   controllers: [AppController],
-  providers: [AppService, MailService],
+  providers: [AppService],
 })
 export class AppModule {}

@@ -15,6 +15,6 @@ export const typeOrmConfig = (configService: ConfigService): TypeOrmModuleOption
   password: configService.get<string>('DB_PASSWORD'),
   database: configService.get<string>('DB_NAME'),
   entities: [User,Payment,Withdrawal,Sellerwallet,Products,Token],
-  synchronize: false,
+  synchronize: true,
   logging: true,
 });

@@ -47,7 +47,7 @@ export class AuthenticationController {
 
 
   @UseGuards(AuthGuard,RoleGuardAuth)
- // @Roles(['buyer'])
+  @Roles(['buyer'])
   @Get('protected')
   someProtected(@Req() req, @Body() body: { prdoduct_Id: string }) {
     return { message: 'accessed Resources', user_Id: req.user_Id };

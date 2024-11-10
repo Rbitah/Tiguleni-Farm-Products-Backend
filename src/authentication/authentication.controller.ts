@@ -1,10 +1,13 @@
-import { Controller, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, HttpException, HttpStatus, Get, Req, UseGuards } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import {
   LoginDto,
   ResetPassowrd,
   SignUpDto,
 } from './dto/create-authentication.dto';
+import { Roles } from './decorator/roles.decorator';
+import { AuthGuard } from './guards/authentication.guard';
+import { RoleGuardAuth } from './guards/roles.guard';
 
 @Controller('authentication')
 export class AuthenticationController {
@@ -40,5 +43,13 @@ export class AuthenticationController {
         HttpStatus.BAD_REQUEST,
       );
     }
+  }
+
+
+  @UseGuards(AuthGuard,RoleGuardAuth)
+ // @Roles(['buyer'])
+  @Get('protected')
+  someProtected(@Req() req, @Body() body: { prdoduct_Id: string }) {
+    return { message: 'accessed Resources', user_Id: req.user_Id };
   }
 }

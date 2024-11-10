@@ -122,5 +122,28 @@ export class AuthenticationService {
     };
   }
 
-  async resetPassword() {}
+  async resetPassword(resetCode, newPassword) {
+    const resetEntry = await this.resetRepository.findOne({
+      where: { token: resetCode },
+      relations: ['user'],
+    });
+
+    if (!resetEntry) {
+      throw new Error('Invalid reset code.');
+    }
+
+    const currentTime = new Date();
+    if (currentTime > resetEntry.expirationDate) {
+      await this.resetRepository.delete({ token: resetCode });
+      throw new Error('Reset code has expired.');
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    resetEntry.user.password = hashedPassword;
+    await this.userRepository.save(resetEntry.user);
+
+    await this.resetRepository.delete({ token: resetCode });
+
+    return { message: 'Password has been reset successfully.' };
+  }
 }

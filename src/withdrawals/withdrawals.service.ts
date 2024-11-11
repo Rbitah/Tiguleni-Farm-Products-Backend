@@ -42,7 +42,9 @@ export class WithdrawalsService {
   }
 
   async cashoutMobile(createWithdrawalDto: CreateWithdrawalDto) {
-    const { mobile, amount, userId } = createWithdrawalDto;
+    const { phoneNumber, amount,userId} = createWithdrawalDto;
+
+    let mobile = phoneNumber
   
     const seller = await this.userRepository.findOne({ where: { userId: userId as any } });
     if (!seller) {
@@ -87,7 +89,7 @@ export class WithdrawalsService {
           date: new Date(),
           mobile,
           status: 'success',
-          seller,
+         seller,
         });
         await this.withdrwalRepository.save(withdrawal);
   

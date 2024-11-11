@@ -7,7 +7,7 @@ export class CreateWithdrawalDto {
 
   @IsString()
   @IsNotEmpty()
-  mobile: string;
+  phoneNumber: string;
 
   @IsNumber()
   @IsNotEmpty()

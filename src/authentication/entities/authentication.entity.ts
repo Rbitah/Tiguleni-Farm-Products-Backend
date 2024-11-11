@@ -10,6 +10,7 @@ import { Products } from 'src/products/products.entity';
 import { Payment } from 'src/payments/entities/payment.entity';
 import { Withdrawal } from 'src/withdrawals/entities/withdrawal.entity';
 import { Sellerwallet } from 'src/sellerwallet/entities/sellerwallet.entity';
+import { Sales } from 'src/sales/entities/sale.entity';
 
 @Entity()
 export class User {
@@ -39,4 +40,10 @@ export class User {
 
   @OneToOne(() => Sellerwallet, (wallet) => wallet.seller)
   wallet: Sellerwallet;
+
+  @OneToMany(() => Sales, (sale) => sale.seller)  
+  sale: Sales[];
 }
+
+
+

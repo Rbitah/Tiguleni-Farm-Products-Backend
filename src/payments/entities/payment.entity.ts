@@ -7,13 +7,16 @@ export class Payment {
   payment_Id: string;
 
   @Column()
-  customer: string;
+  customerEmail: string;
 
   @Column()
   seller: string;
 
   @Column()
- productId: string;
+  productId: string;
+
+  @Column()
+  product_name: string;
 
   @Column()
   customer_email: string;

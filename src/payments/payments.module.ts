@@ -7,10 +7,11 @@ import { Payment } from './entities/payment.entity';
 import { Sellerwallet } from 'src/sellerwallet/entities/sellerwallet.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HttpModule } from '@nestjs/axios';
+import { Sales } from 'src/sales/entities/sale.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Products, Payment, Sellerwallet]),
+    TypeOrmModule.forFeature([User, Products, Payment, Sellerwallet,Sales]),
     HttpModule,
   ],
   controllers: [PaymentsController],

@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { firstValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
+import { Sales } from 'src/sales/entities/sale.entity';
 
 @Injectable()
 export class PaymentsService {
@@ -33,6 +34,10 @@ export class PaymentsService {
 
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+
+    
+    @InjectRepository(Sales)
+    private readonly salesRepository: Repository<Sales>,
   ) {}
 
   private generateUniqueTransactionReference(): string {
@@ -62,7 +67,8 @@ export class PaymentsService {
     const pendingPayment = this.paymentRepository.create({
       status: 'pending',
       tx_ref,
-      customer: buyer.userId,
+      customerEmail: buyer.email,
+      product_name:product.products_name,
       buyer,
       seller: product.seller.userId,
       productId,
@@ -152,7 +158,7 @@ export class PaymentsService {
           throw new NotFoundException(
             'Product not found for verified payment.',
           );
-
+const productType = product.products_name
         let sellerWallet = await this.sellerwalletRepository.findOne({
           where: { seller: { userId: product.seller.userId } },
         });
@@ -175,6 +181,11 @@ export class PaymentsService {
 
         await this.paymentRepository.save(pendingPayment);
         await this.sellerwalletRepository.save(sellerWallet);
+        const newSale = await this.salesRepository.create({
+          amount: paymentDetails.amount,productType,
+          seller: { userId: sellerWallet.seller.userId },
+        })
+        await this.salesRepository.save(newSale)
 
         return {
           statusCode: 200,
@@ -199,4 +210,5 @@ export class PaymentsService {
       );
     }
   }
+
 }

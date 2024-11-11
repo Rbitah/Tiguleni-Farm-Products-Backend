@@ -6,6 +6,7 @@ import { Withdrawal } from 'src/withdrawals/entities/withdrawal.entity';
 import { Sellerwallet } from 'src/sellerwallet/entities/sellerwallet.entity';
 import { Products } from 'src/products/products.entity';
 import { Token } from 'src/authentication/entities/reset.entity';
+import { Sales } from 'src/sales/entities/sale.entity';
 
 export const typeOrmConfig = (configService: ConfigService): TypeOrmModuleOptions => ({
   type: 'mysql',
@@ -14,7 +15,7 @@ export const typeOrmConfig = (configService: ConfigService): TypeOrmModuleOption
   username: configService.get<string>('DB_USERNAME'),
   password: configService.get<string>('DB_PASSWORD'),
   database: configService.get<string>('DB_NAME'),
-  entities: [User,Payment,Withdrawal,Sellerwallet,Products,Token],
+  entities: [User,Payment,Withdrawal,Sellerwallet,Products,Token,Sales],
   synchronize: true,
   logging: true,
 });

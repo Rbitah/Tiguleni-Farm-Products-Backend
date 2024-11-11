@@ -9,6 +9,7 @@ import { PaymentsModule } from './payments/payments.module';
 import { WithdrawalsModule } from './withdrawals/withdrawals.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { SellerwalletModule } from './sellerwallet/sellerwallet.module';
+import { SalesModule } from './sales/sales.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { SellerwalletModule } from './sellerwallet/sellerwallet.module';
     WithdrawalsModule,
     AuthenticationModule,
     SellerwalletModule,
+    SalesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

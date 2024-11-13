@@ -15,6 +15,7 @@ export const typeOrmConfig = (configService: ConfigService): TypeOrmModuleOption
   username: configService.get<string>('DB_USERNAME'),
   password: configService.get<string>('DB_PASSWORD'),
   database: configService.get<string>('DB_NAME'),
+  // url:configService.get<string>('MYSQL_PUBLIC_URL'),  for online database
   entities: [User,Payment,Withdrawal,Sellerwallet,Products,Token,Sales],
   synchronize: true,
   logging: true,

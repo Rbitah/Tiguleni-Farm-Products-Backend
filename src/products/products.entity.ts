@@ -22,8 +22,7 @@ export class Products{
     quantity_metric:string;
 
     @Column()
-    imageurl:string;
-
+    imageUrl: string;
     @ManyToOne(() => User, (user) => user.products)
     seller: User;
 

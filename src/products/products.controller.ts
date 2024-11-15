@@ -1,25 +1,31 @@
-import { Controller,Get,Put,Delete,Param,Post } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { ProductsService } from './products.service';
+import { CreateProductDto } from './dto/create-product.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { memoryStorage } from 'multer';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Controller('products')
 export class ProductsController {
-    constructor(){};
-    @Post()
-  create(): string {
-    return ;
-  }
-  @Get(':id')
-findOne(@Param('id') id: string): string {
-  return ;
-}
-@Put(':id')
-  update(@Param('id') id: string) {
-    return;
-  }
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return ;
+  constructor(private readonly productsService: ProductsService,
+    private readonly cloudinaryService: CloudinaryService,
+  ) {}
+
+  @Post()
+  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
+  async createProduct(
+    @Body() createProductDto: CreateProductDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    const imageUrl = await this.cloudinaryService.uploadImage(file);
+    const product = await this.productsService.create(createProductDto, imageUrl);
+    return product;
   }
 
 }
-
-

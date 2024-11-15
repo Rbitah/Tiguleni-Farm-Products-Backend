@@ -10,6 +10,7 @@ import { WithdrawalsModule } from './withdrawals/withdrawals.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { SellerwalletModule } from './sellerwallet/sellerwallet.module';
 import { SalesModule } from './sales/sales.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { SalesModule } from './sales/sales.module';
     AuthenticationModule,
     SellerwalletModule,
     SalesModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -31,6 +31,10 @@ export class AuthenticationService {
       where: { email: email },
     });
 
+    if(!email){
+      throw new UnauthorizedException("Enter email")
+    }
+
     if (userWithEMail) {
       throw new BadRequestException('Email already in use');
     }

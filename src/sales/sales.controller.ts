@@ -16,8 +16,8 @@ export class SalesController {
   }
 
   @UseGuards(AuthGuard,RoleGuardAuth)
-  @Roles(['seller'])
-  @Get('dashboard/:sellerId')
+   @Roles(['seller'])
+  @Get('dashboard/seller')
   async getMonthlySalesDataBySeller(@Req() req, ) {
     return await this.salesService.getMonthlySalesDataBySeller(req.userId);
   }

@@ -44,7 +44,7 @@ export class PaymentsService {
     return uuidv4();
   }
 
-  async create(productId: string, userId: string) {
+  async create(productId: string, quantity:number, userId: string) {
     const buyer = await this.userRepository.findOne({ where: { userId } });
     if (!buyer) throw new UnauthorizedException('Buyer not found');
 
@@ -63,6 +63,7 @@ export class PaymentsService {
       },
     };
 
+    const totalamount=quantity*product.price
     // Save a pending payment record with tx_ref and productId
     const pendingPayment = this.paymentRepository.create({
       status: 'pending',
@@ -73,7 +74,7 @@ export class PaymentsService {
       seller: product.seller.userId,
       productId,
       customer_email: buyer.email,
-      amount: product.price,
+      amount: totalamount,
       date: new Date(),
     });
     await this.paymentRepository.save(pendingPayment);
@@ -90,7 +91,7 @@ export class PaymentsService {
             email: buyer.email,
             name: product.products_name,
             description: product.products_name,
-            amount: product.price,
+            amount: totalamount,
           },
           options,
         ),

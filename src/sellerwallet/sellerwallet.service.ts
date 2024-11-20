@@ -14,11 +14,11 @@ export class SellerwalletService {
 
   async sellerWallet(userId: string) {
     let sellerwallet = await this.sellerwalletRepository.findOne({
-      where: { seller: { userId: userId } },
+      where: { seller: { userId } },
     });
     if (!sellerwallet) {
       sellerwallet = this.sellerwalletRepository.create({
-        seller: sellerwallet.seller,
+        seller: { userId },
         mainWalletBalance: 0,
         totalNumberOfSales: 0,
         totalSales: 0,

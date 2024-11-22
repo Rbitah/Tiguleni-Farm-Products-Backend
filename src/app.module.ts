@@ -11,6 +11,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { SellerwalletModule } from './sellerwallet/sellerwallet.module';
 import { SalesModule } from './sales/sales.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     SellerwalletModule,
     SalesModule,
     CloudinaryModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [AppService],

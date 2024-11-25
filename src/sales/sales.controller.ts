@@ -26,4 +26,29 @@ export class SalesController {
   async getProductTypeDistribution() {
     return this.salesService.getProductTypeDistribution();
   }
+
+  @UseGuards(AuthGuard, RoleGuardAuth)
+  @Roles(['admin']) 
+  @Get('allsalesAdmin')
+  async getSales() {
+    const salesData = await this.salesService.getAllSalesAdmin();
+    return salesData;
+  }
+
+
+  @UseGuards(AuthGuard, RoleGuardAuth)
+  @Roles(['seller']) 
+  @Get('sellersales')
+  async allSellerSales(@Req() req){
+    const userId=req.userId
+    return this.salesService.allSellerSales(userId)
+  }
+
+  @UseGuards(AuthGuard, RoleGuardAuth)
+  @Roles(['buyer']) 
+  @Get('purchases')
+  async allBuyerPurchase(@Req() req){
+    const userId=req.userId
+    return this.salesService.allBuyerPurchase(userId)
+  }
 }

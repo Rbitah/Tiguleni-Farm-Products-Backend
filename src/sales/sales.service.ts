@@ -4,12 +4,15 @@ import { UpdateSaleDto } from './dto/update-sale.dto';
 import { Sales } from './entities/sale.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Payment } from 'src/payments/entities/payment.entity';
 
 @Injectable()
 export class SalesService {
   constructor(
     @InjectRepository(Sales)
     private salesRepository: Repository<Sales>,
+    @InjectRepository(Payment)
+    private readonly paymentRepository:Repository<Payment>
   ){}
   async getMonthlySalesData() {
     const sales = await this.salesRepository.find();
@@ -108,5 +111,21 @@ export class SalesService {
     };
 
     return pieChartData;
+  }
+
+  async getAllSalesAdmin(): Promise<Payment[]> {
+    return await this.paymentRepository.find(); 
+  }
+
+  async allSellerSales(userId:string){
+
+    const sales = await this.paymentRepository.find({where:{seller:userId}})
+    return {sales}
+  }
+
+  async allBuyerPurchase(userId:string){
+
+    const sales = await this.paymentRepository.find({where: { buyer: { userId } }, })
+    return {sales}
   }
 }

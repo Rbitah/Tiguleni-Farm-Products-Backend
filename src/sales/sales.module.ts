@@ -5,9 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Sales } from './entities/sale.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { Payment } from 'src/payments/entities/payment.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Sales]),JwtModule.registerAsync({
+  imports:[TypeOrmModule.forFeature([Sales,Payment]),JwtModule.registerAsync({
     useFactory: (configService: ConfigService) => ({
       secret: configService.get<string>('JWT_SECRET'),
       signOptions: { expiresIn:configService.get<string>('JWT_EXPIRATION') },

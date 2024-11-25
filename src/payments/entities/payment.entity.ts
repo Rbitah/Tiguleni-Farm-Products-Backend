@@ -18,9 +18,6 @@ export class Payment {
   @Column()
   product_name: string;
 
-  @Column()
-  customer_email: string;
-
   @Column('decimal')
   amount: number;
 

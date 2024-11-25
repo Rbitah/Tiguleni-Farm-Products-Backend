@@ -11,6 +11,7 @@ import { Payment } from 'src/payments/entities/payment.entity';
 import { Withdrawal } from 'src/withdrawals/entities/withdrawal.entity';
 import { Sellerwallet } from 'src/sellerwallet/entities/sellerwallet.entity';
 import { Sales } from 'src/sales/entities/sale.entity';
+import { Feedback } from 'src/ratesandreviews/entities/ratesandreview.entity';
 
 @Entity()
 export class User {
@@ -43,6 +44,9 @@ export class User {
 
   @OneToMany(() => Sales, (sale) => sale.seller)  
   sale: Sales[];
+
+  @OneToMany(() => Feedback, (feedback) => feedback.user)
+  feedbacks: Feedback[];
 }
 
 

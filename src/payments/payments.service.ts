@@ -73,7 +73,6 @@ export class PaymentsService {
       buyer,
       seller: product.seller.userId,
       productId,
-      customer_email: buyer.email,
       amount: totalamount,
       date: new Date(),
     });
@@ -175,7 +174,7 @@ const productType = product.products_name
 
         pendingPayment.status = paymentDetails.status;
         pendingPayment.amount = paymentDetails.amount;
-        pendingPayment.customer_email = paymentDetails.customer.email;
+        pendingPayment.customerEmail = paymentDetails.customer.email;
         pendingPayment.date = new Date(
           paymentDetails.authorization.completed_at,
         );

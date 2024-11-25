@@ -15,4 +15,9 @@ export class SellerwalletController {
     const userId =req.userId
     return this.sellerwalletService.sellerWallet(userId);
   }
+
+  @Get('/summary')
+  async getAdminSummary() {
+    return this.sellerwalletService.getAdminSummary();
+  }
 }

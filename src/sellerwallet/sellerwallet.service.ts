@@ -29,4 +29,26 @@ export class SellerwalletService {
     await this.sellerwalletRepository.save(sellerwallet);
     return { sellerwallet };
   }
+
+
+  async getAdminSummary() {
+    const [result] = await this.sellerwalletRepository
+      .createQueryBuilder('wallet')
+      .select([
+        'SUM(wallet.totalNumberOfSales) as totalNumberOfSales',
+        'SUM(wallet.totalSales) as totalSales',
+        'SUM(wallet.totalNumberOfWithdrawals) as totalNumberOfWithdrawals',
+        'SUM(wallet.totalCashOut) as totalCashOut',
+        'SUM(wallet.mainWalletBalance) as totalMainWalletBalance',
+      ])
+      .getRawMany();
+
+    return {
+      totalNumberOfSales: parseInt(result.totalNumberOfSales, 10) || 0,
+      totalSales: parseFloat(result.totalSales) || 0,
+      totalNumberOfWithdrawals: parseInt(result.totalNumberOfWithdrawals, 10) || 0,
+      totalCashOut: parseFloat(result.totalCashOut) || 0,
+      totalMainWalletBalance: parseFloat(result.totalMainWalletBalance) || 0,
+    };
+  }
 }

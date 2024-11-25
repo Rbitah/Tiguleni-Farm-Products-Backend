@@ -1,8 +1,11 @@
 import { Controller,Get,Put,Delete,Param,Post } from '@nestjs/common';
+import { ProductsService } from './products.service';
 
 @Controller('products')
 export class ProductsController {
-    constructor(){};
+    constructor(
+      private readonly productsService:ProductsService
+    ){};
     @Post()
   create(): string {
     return ;
@@ -18,6 +21,11 @@ findOne(@Param('id') id: string): string {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return ;
+  }
+
+  @Get(':productId')
+  async findOneProduct(@Param('productId') id: string): Promise<any> {
+    return await this.productsService.findOneProduc(id);
   }
 
 }

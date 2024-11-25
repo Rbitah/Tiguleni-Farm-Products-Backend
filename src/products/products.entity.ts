@@ -1,31 +1,29 @@
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { User } from "src/authentication/entities/authentication.entity";
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 
 @Entity()
-export class Products{
-    @PrimaryGeneratedColumn('uuid')
-    productId:string;
+export class Products {
+  @PrimaryGeneratedColumn('uuid')
+  productId: string;
 
-    @Column()
-    products_name:string;
+  @Column()
+  products_name: string;
 
-    @Column()
-    price:number;
+  @Column('decimal')
+  price: number;
 
-    @Column()
-    location:string;
+  @Column()
+  location: string;
 
-    @Column()
-    quantity_amount:number;
+  @Column('int')
+  quantity_amount: number;
 
-    @Column()
-    quantity_metric:string;
+  @Column()
+  quantity_metric: string;
 
-    @Column()
-    imageUrl: string;
-    @ManyToOne(() => User, (user) => user.products)
-    seller: User;
+  @Column()
+  imageUrl: string;
 
-
-    
+  @ManyToOne(() => User, (user) => user.products)
+  seller: User;
 }

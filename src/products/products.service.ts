@@ -1,33 +1,39 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, ILike } from 'typeorm';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { CreateProductDto } from './dto/create-product.dto';
 import { Products } from './products.entity';
+import { Repository } from 'typeorm';
+
+import { InjectRepository } from '@nestjs/typeorm';
+
 import { User } from 'src/authentication/entities/authentication.entity';
 
 @Injectable()
 export class ProductsService {
-  findOneBy: any;
   constructor(
+    private readonly cloudinaryService: CloudinaryService,
     @InjectRepository(Products)
-    private productsRepository: Repository<Products>,
+    private readonly productsRepository: Repository<Products>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
-  createproducts(products): Promise<null | Products> {
-    return this.productsRepository.save(products);
-  }
-  getproducts(id: number): Promise<null | Products> {
-    return this.findOneBy({ id });
-  }
-  searchByQuery(query): Promise<Products[]> {
-    return this.productsRepository.find({
-      where: [
-        { products_name: ILike(`%${query}%`) },
-        { location: ILike(`%${query}%`) },
-      ],
-    });
-  }
 
+  async create(createProductDto: CreateProductDto, imageUrl) {
+    try {
+      const newProduct = this.productsRepository.create({
+        ...createProductDto,
+        imageUrl,
+      });
+
+      return await this.productsRepository.save(newProduct);
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to create product');
+    }
+  }
   async findOneProduc(productId: string): Promise<any> {
     const product = await this.productsRepository.findOne({
       where: { productId: productId },

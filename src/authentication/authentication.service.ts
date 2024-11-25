@@ -51,7 +51,6 @@ export class AuthenticationService {
     await this.mailService.sendWelcomeEmail(email, newUser.username);
     return {
       email,
-
       role,
       username,
     };
@@ -74,11 +73,11 @@ export class AuthenticationService {
     if (!compareWithHasedPassword) {
       throw new UnauthorizedException('Wrong credentials');
     }
-    return this.generateAccessToken(userAvailable.userId, userAvailable.role);
+    return this.generateAccessToken(userAvailable.userId, userAvailable.role,userAvailable.username);
   }
 
-  async generateAccessToken(userId, role) {
-    const accessToken = this.jwtService.sign({ userId, role });
+  async generateAccessToken(userId, role,username) {
+    const accessToken = this.jwtService.sign({ userId, role,username });
 
     return {
       accessToken,

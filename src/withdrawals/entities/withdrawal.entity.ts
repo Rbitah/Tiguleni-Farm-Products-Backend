@@ -24,6 +24,9 @@ export class Withdrawal {
   @Column()
   status: string;
 
+  @Column()
+  transID: string;
+
   @ManyToOne(() => User, (user) => user.withdrawals, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'sellerUserId' })
   seller: User;

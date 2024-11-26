@@ -8,6 +8,7 @@ import { Products } from 'src/products/products.entity';
 import { Token } from 'src/authentication/entities/reset.entity';
 import { Sales } from 'src/sales/entities/sale.entity';
 import { Feedback } from 'src/ratesandreviews/entities/ratesandreview.entity';
+import { Profile } from 'src/userprofile/entities/userprofile.entity';
 
 export const typeOrmConfig = (configService: ConfigService): TypeOrmModuleOptions => ({
   type: 'mysql',
@@ -17,7 +18,7 @@ export const typeOrmConfig = (configService: ConfigService): TypeOrmModuleOption
   password: configService.get<string>('DB_PASSWORD'),
   database: configService.get<string>('DB_NAME'),
   // url:configService.get<string>('MYSQL_PUBLIC_URL'),  for online database
-  entities: [User,Payment,Withdrawal,Sellerwallet,Products,Token,Sales,Feedback],
-  synchronize: true,
+  entities: [User,Payment,Withdrawal,Sellerwallet,Products,Token,Sales,Feedback,Profile],
+  synchronize:true,
   logging: true,
 });

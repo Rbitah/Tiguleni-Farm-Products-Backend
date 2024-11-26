@@ -13,6 +13,8 @@ import { SalesModule } from './sales/sales.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { RatesandreviewsModule } from './ratesandreviews/ratesandreviews.module';
 import { CartModule } from './cart/cart.module';
+import { UserprofileModule } from './userprofile/userprofile.module';
+
 
 @Module({
   imports: [
@@ -35,6 +37,8 @@ import { CartModule } from './cart/cart.module';
     CloudinaryModule,
     RatesandreviewsModule,
     CartModule,
+    UserprofileModule,
+    
   ],
   controllers: [AppController],
   providers: [AppService],

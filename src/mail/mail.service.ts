@@ -10,7 +10,7 @@ export class MailService {
   ) {
     this.transporter = nodemailer.createTransport({
       host: this.configService.get<string>('HOST'),
-      port: this.configService.get<number>('PORT'),
+      port: this.configService.get<number>('PORRT'),
       secure: false,
       auth: {
         user: this.configService.get<string>('EMAIL_USER'),

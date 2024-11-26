@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { User } from "src/authentication/entities/authentication.entity";
+import { Feedback } from 'src/ratesandreviews/entities/ratesandreview.entity';
 
 @Entity()
 export class Products {
@@ -24,6 +25,13 @@ export class Products {
   @Column()
   imageUrl: string;
 
+  @Column()
+  category: string;
+
   @ManyToOne(() => User, (user) => user.products)
+  @JoinColumn({ name: 'sellerUserId' }) 
   seller: User;
+
+  @OneToMany(() => Feedback, (feedback) => feedback.product)
+  feedback: Feedback[];  
 }

@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsNotEmpty } from 'class-validator';
+import { IsString, IsNumber, IsNotEmpty, IsUUID, IsOptional } from 'class-validator';
 
 export class CreateProductDto {
   @IsString()
@@ -20,5 +20,10 @@ export class CreateProductDto {
   @IsString()
   @IsNotEmpty()
   quantity_metric: string;
+
+  @IsString()
+  @IsOptional()
+  category: string;
+
 }
 

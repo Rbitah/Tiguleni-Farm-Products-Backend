@@ -19,11 +19,11 @@ export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
   @UseGuards(AuthGuard,RoleGuardAuth)
-  @Roles(['buyer'])
+  @Roles(['buyer','seller'])
   @Post()
   create(@Req() req,@Body() body: { productId: string, quantity:number}) {
     const { productId, quantity} = body;
-    console.log()
+    console.log("we heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
     const userId=req.user_Id
     return this.paymentsService.create(productId, quantity ,userId);
   }

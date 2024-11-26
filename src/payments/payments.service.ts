@@ -48,10 +48,14 @@ export class PaymentsService {
     const buyer = await this.userRepository.findOne({ where: { userId } });
     if (!buyer) throw new UnauthorizedException('Buyer not found');
 
+    const slicedProductId = productId.slice(1);
+
+    console.log("response reuhuuuuuturned");
     const product = await this.productRepository.findOne({
-      where: { productId },
+      where: { productId: slicedProductId },
       relations: ['seller'],
     });
+    console.log(productId)
     if (!product) throw new NotFoundException('Product not found');
 
     const tx_ref = this.generateUniqueTransactionReference();
@@ -68,11 +72,12 @@ export class PaymentsService {
     const pendingPayment = this.paymentRepository.create({
       status: 'pending',
       tx_ref,
+      quantityBought:`${quantity}`,
       customerEmail: buyer.email,
       product_name:product.products_name,
       buyer,
       seller: product.seller.userId,
-      productId,
+      productId:slicedProductId,
       amount: totalamount,
       date: new Date(),
     });
@@ -124,6 +129,22 @@ export class PaymentsService {
 
   async verifyPayment(tx_ref: string): Promise<any> {
     try {
+      const pendingPayment = await this.paymentRepository.findOne({
+        where: { tx_ref },
+      });
+  
+      if (!pendingPayment)
+        throw new NotFoundException(
+          'Pending payment not found for verification.',
+        );
+  
+      if (pendingPayment.status === 'success' || pendingPayment.status === 'success') {
+        return {
+          statusCode: 200,
+          message: 'Payment has already been verified.',
+        };
+      }
+  
       const response = await firstValueFrom(
         this.httpService.get(
           `https://api.paychangu.com/verify-payment/${tx_ref}`,
@@ -135,21 +156,12 @@ export class PaymentsService {
           },
         ),
       );
-
+  
       const data = response.data;
-
+  
       if (data.status === 'success') {
         const paymentDetails = data.data;
-
-        // Retrieve the pending payment using tx_ref
-        const pendingPayment = await this.paymentRepository.findOne({
-          where: { tx_ref },
-        });
-        if (!pendingPayment)
-          throw new NotFoundException(
-            'Pending payment not found for verification.',
-          );
-
+  
         const product = await this.productRepository.findOne({
           where: { productId: pendingPayment.productId },
           relations: ['seller'],
@@ -158,35 +170,39 @@ export class PaymentsService {
           throw new NotFoundException(
             'Product not found for verified payment.',
           );
-const productType = product.products_name
+  
+        const productType = product.products_name;
+        const userId = product.seller.userId;
+  
         let sellerWallet = await this.sellerwalletRepository.findOne({
-          where: { seller: { userId: product.seller.userId } },
+          where: { seller: { userId } },
         });
-
+  
         if (!sellerWallet) {
           sellerWallet = this.sellerwalletRepository.create({
             seller: product.seller,
             mainWalletBalance: 0,
           });
         }
-
+  
         sellerWallet.mainWalletBalance += Number(paymentDetails.amount);
-
-        pendingPayment.status = paymentDetails.status;
+        sellerWallet.totalNumberOfSales += 1;
+        sellerWallet.totalSales += 1;
+        pendingPayment.status = 'success';
         pendingPayment.amount = paymentDetails.amount;
         pendingPayment.customerEmail = paymentDetails.customer.email;
-        pendingPayment.date = new Date(
-          paymentDetails.authorization.completed_at,
-        );
-
+        pendingPayment.date = new Date(paymentDetails.authorization.completed_at);
+  
         await this.paymentRepository.save(pendingPayment);
         await this.sellerwalletRepository.save(sellerWallet);
+  
         const newSale = await this.salesRepository.create({
-          amount: paymentDetails.amount,productType,
-          seller: { userId: sellerWallet.seller.userId },
-        })
-        await this.salesRepository.save(newSale)
-
+          amount: paymentDetails.amount,
+          productType,
+          seller: { userId },
+        });
+        await this.salesRepository.save(newSale);
+  
         return {
           statusCode: 200,
           message: 'Payment verified and saved successfully.',
@@ -210,5 +226,6 @@ const productType = product.products_name
       );
     }
   }
+  
 
 }

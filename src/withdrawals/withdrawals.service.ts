@@ -49,8 +49,8 @@ export class WithdrawalsService {
     return refId;
   }
 
-  async cashoutMobile(createWithdrawalDto: CreateWithdrawalDto) {
-    const { phoneNumber, amount, userId } = createWithdrawalDto;
+  async cashoutMobile(createWithdrawalDto: CreateWithdrawalDto,userId:string) {
+    const { phoneNumber, amount } = createWithdrawalDto;
 
     let mobile = phoneNumber;
 
@@ -94,10 +94,11 @@ export class WithdrawalsService {
           },
         ),
       );
+    
 
       if (response.data.status === 'success') {
         const withdrawal = this.withdrwalRepository.create({
-          amountCashedOut: response.data.amount,
+          amountCashedOut: amount,
           date: new Date(),
           mobile,
           status: 'success',
@@ -107,6 +108,8 @@ export class WithdrawalsService {
         await this.withdrwalRepository.save(withdrawal);
 
         sellerBalance.mainWalletBalance -= amount;
+        sellerBalance.totalCashOut += amount;
+        sellerBalance.totalNumberOfWithdrawals += 1;
         await this.sellerWalletRepository.save(sellerBalance);
 
         return response.data;
@@ -129,14 +132,15 @@ export class WithdrawalsService {
   }
   
   async getWithdrawalsList(userId: string) {
-    let allSellerwithdrwals = await this.withdrwalRepository.find({
-      where: { seller: { userId: userId } },
-      relations: ['seller'],
-    });
-
-    return { allSellerwithdrwals };
+    const allSellerWithdrawals = await this.withdrwalRepository
+      .createQueryBuilder('withdrawal')
+      .leftJoinAndSelect('withdrawal.seller', 'seller')
+      .where('seller.userId = :userId', { userId })
+      .getMany();
+  
+    return { allSellerWithdrawals };
   }
-
+  
   async adminWithdrawalsList(){
     try {
       const withdrawals = await this.withdrwalRepository.find();

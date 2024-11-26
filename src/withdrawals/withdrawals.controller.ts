@@ -20,9 +20,13 @@ import { Roles } from 'src/authentication/decorator/roles.decorator';
 export class WithdrawalsController {
   constructor(private readonly withdrawalsService: WithdrawalsService) {}
 
+
+  @UseGuards(AuthGuard, RoleGuardAuth)
+  @Roles(['seller'])
   @Post('cash-out')
-  cashoutMobile(@Body() createWithdrawalDto: CreateWithdrawalDto) {
-    return this.withdrawalsService.cashoutMobile(createWithdrawalDto);
+  cashoutMobile(@Body() createWithdrawalDto: CreateWithdrawalDto,@Req() req) {
+    const userId = req.userId;
+    return this.withdrawalsService.cashoutMobile(createWithdrawalDto,userId);
   }
 
   @UseGuards(AuthGuard, RoleGuardAuth)

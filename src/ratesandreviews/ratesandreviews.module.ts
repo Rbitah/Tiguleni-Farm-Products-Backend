@@ -6,9 +6,10 @@ import { User } from 'src/authentication/entities/authentication.entity';
 import { Feedback } from './entities/ratesandreview.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { Products } from 'src/products/products.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([User,Feedback]),JwtModule.registerAsync({
+  imports:[TypeOrmModule.forFeature([User,Feedback,Products]),JwtModule.registerAsync({
     useFactory: (configService: ConfigService) => ({
       secret: configService.get<string>('JWT_SECRET'),
       signOptions: { expiresIn:configService.get<string>('JWT_EXPIRATION') },

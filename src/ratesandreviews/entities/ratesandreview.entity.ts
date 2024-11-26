@@ -1,6 +1,7 @@
 
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { User } from 'src/authentication/entities/authentication.entity';
+import { Products } from 'src/products/products.entity';
 @Entity('feedbacks')
 export class Feedback {
   @PrimaryGeneratedColumn('uuid')
@@ -24,4 +25,9 @@ export class Feedback {
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
+
+  @ManyToOne(() => Products, (product) => product.feedback)  
+  @JoinColumn({ name: 'productId' })
+  product: Products;
 }
+

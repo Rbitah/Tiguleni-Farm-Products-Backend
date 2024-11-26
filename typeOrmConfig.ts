@@ -19,6 +19,6 @@ export const typeOrmConfig = (configService: ConfigService): TypeOrmModuleOption
   // database: configService.get<string>('DB_NAME'),
   url:configService.get<string>('MYSQL_PUBLIC_URL'), 
   entities: [User,Payment,Withdrawal,Sellerwallet,Products,Token,Sales,Feedback,Profile],
-  synchronize:true,
+  synchronize:false,
   logging: true,
 });

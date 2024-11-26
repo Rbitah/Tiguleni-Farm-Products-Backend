@@ -44,7 +44,7 @@ export class SalesController {
     return this.salesService.allSellerSales(userId)
   }
 
-  @UseGuards(AuthGuard, RoleGuardAuth)
+  @UseGuards(AuthGuard,RoleGuardAuth)
   @Roles(['buyer']) 
   @Get('purchases')
   async allBuyerPurchase(@Req() req){

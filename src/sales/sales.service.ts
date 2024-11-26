@@ -5,6 +5,7 @@ import { Sales } from './entities/sale.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Payment } from 'src/payments/entities/payment.entity';
+import { Products } from 'src/products/products.entity';
 
 @Injectable()
 export class SalesService {
@@ -12,7 +13,9 @@ export class SalesService {
     @InjectRepository(Sales)
     private salesRepository: Repository<Sales>,
     @InjectRepository(Payment)
-    private readonly paymentRepository:Repository<Payment>
+    private readonly paymentRepository:Repository<Payment>,
+    @InjectRepository(Products)
+    private readonly productsRepository:Repository<Products>
   ){}
   async getMonthlySalesData() {
     const sales = await this.salesRepository.find();
@@ -90,7 +93,6 @@ export class SalesService {
       return acc;
     }, {});
 
-    // Prepare data for the chart
     const labels = Object.keys(productTypeTotals);
     const data = Object.values(productTypeTotals);
 
@@ -123,9 +125,25 @@ export class SalesService {
     return {sales}
   }
 
-  async allBuyerPurchase(userId:string){
-
-    const sales = await this.paymentRepository.find({where: { buyer: { userId } }, })
-    return {sales}
+  async allBuyerPurchase(userId: string) {
+    const sales = await this.paymentRepository.find({
+      where: { buyer: { userId } },
+    });
+  
+    const salesWithProducts = await Promise.all(
+      sales.map(async (sale) => {
+        const product = await this.productsRepository.findOne({
+          where: { productId: sale.productId },
+        });
+  
+        return {
+          ...sale,
+          productImage:product.imageUrl,
+        };
+      })
+    );
+  
+    return { sales: salesWithProducts };
   }
+  
 }

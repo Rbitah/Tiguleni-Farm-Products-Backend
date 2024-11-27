@@ -22,8 +22,8 @@ export class AuthenticationService {
     @InjectRepository(Token)
     private readonly resetRepository: Repository<Token>,
     private readonly jwtService: JwtService,
-    
   ) {}
+
   async signup(signUpDto: SignUpDto) {
     const { email, role, password, username } = signUpDto;
 
@@ -31,8 +31,8 @@ export class AuthenticationService {
       where: { email: email },
     });
 
-    if(!email){
-      throw new UnauthorizedException("Enter email")
+    if (!email) {
+      throw new UnauthorizedException('Enter email');
     }
 
     if (userWithEMail) {
@@ -47,14 +47,18 @@ export class AuthenticationService {
       role: role as Role,
       username,
     });
+
     await this.userRepository.save(newUser);
+
     await this.mailService.sendWelcomeEmail(email, newUser.username);
-    return {
-      email,
-      role,
-      username,
-    };
+
+    return this.generateAccessToken(
+      newUser.userId,
+      newUser.role,
+      newUser.username,
+    );
   }
+
   async login(loginDto: LoginDto) {
     const { email, password } = loginDto;
 
@@ -73,11 +77,15 @@ export class AuthenticationService {
     if (!compareWithHasedPassword) {
       throw new UnauthorizedException('Wrong credentials');
     }
-    return this.generateAccessToken(userAvailable.userId, userAvailable.role,userAvailable.username);
+    return this.generateAccessToken(
+      userAvailable.userId,
+      userAvailable.role,
+      userAvailable.username,
+    );
   }
 
-  async generateAccessToken(userId, role,username) {
-    const accessToken = this.jwtService.sign({ userId, role,username });
+  async generateAccessToken(userId, role, username) {
+    const accessToken = this.jwtService.sign({ userId, role, username });
 
     return {
       accessToken,

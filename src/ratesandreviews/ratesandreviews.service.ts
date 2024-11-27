@@ -20,16 +20,16 @@ export class RatesandreviewsService {
     createFeedbackDto: CreateRatesandreviewDto,
     userId: string,
   ) {
-    // const user = await this.userRepository.findOne({
-    //   where: { userId: userId },
-    // });
-    // if (!user) {
-    //   throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    // }
+    const user = await this.userRepository.findOne({
+      where: { userId: userId },
+    });
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
 
     const feedback = this.feedbackRepository.create({
       ...createFeedbackDto,
-      // user,
+      user,
     });
     await this.feedbackRepository.save(feedback);
     return{message:"feedback sent"};
